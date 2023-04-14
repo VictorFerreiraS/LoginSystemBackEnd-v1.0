@@ -12,7 +12,7 @@ public class UserController {
     private final UserService userService;
 
 
-    //    User Register
+    // User Register
     @CrossOrigin
     @PostMapping("/register-user")
     public void registerUser(@RequestBody UserRegistrationRequest userRequest) {
