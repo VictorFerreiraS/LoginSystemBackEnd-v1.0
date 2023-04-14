@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     private final UserService userService;
 
+
+    //    User Register
     @CrossOrigin
     @PostMapping("/register-user")
     public void registerUser(@RequestBody UserRegistrationRequest userRequest) {
