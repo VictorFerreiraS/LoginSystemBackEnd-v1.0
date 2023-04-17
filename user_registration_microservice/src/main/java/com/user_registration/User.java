@@ -19,7 +19,6 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Integer id;
-
     public String firstName;
     public String lastName;
     public String email;

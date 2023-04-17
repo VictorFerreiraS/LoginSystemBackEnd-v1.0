@@ -20,6 +20,6 @@ public class UserService {
         userRepository.save(user);
         // todo: check if email valid
         // todo: check if email not taken
-        // todo: Send confirmaition email
+        // todo: Send confirmation email
     }
 }
