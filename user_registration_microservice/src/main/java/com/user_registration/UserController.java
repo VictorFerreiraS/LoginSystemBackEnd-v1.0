@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 public class UserController {
     private final UserService userService;
+    private final UserRepository repository;
 
     // User Register
     @CrossOrigin
@@ -18,4 +19,11 @@ public class UserController {
         log.info("new user registration {}", userRequest);
         userService.registerUser(userRequest);
     }
+
+    @GetMapping(path = "{email}")
+    public User getUser(@PathVariable("email") String email) {
+        User userByEmail = repository.findByEmail(email);
+        return userByEmail;
+    }
+
 }

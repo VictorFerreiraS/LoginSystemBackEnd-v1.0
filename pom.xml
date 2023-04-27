@@ -12,11 +12,13 @@
 
     <modules>
         <module>user_registration_microservice</module>
+        <module>user_login_microservice</module>
     </modules>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring.boot.dependecies.version>3.0.4</spring.boot.dependecies.version>
+        <spring.security.version>6.0.3</spring.security.version>
         <spring.boot.maven.plugin.version>3.0.4</spring.boot.maven.plugin.version>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
@@ -28,6 +30,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
                 <version>${spring.boot.dependecies.version}</version>
+
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
@@ -41,6 +44,18 @@
             <artifactId>lombok</artifactId>
             <version>1.18.26</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
 
         <!-- warning -->
         <dependency>
