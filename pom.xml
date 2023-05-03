@@ -11,8 +11,7 @@
     <url>https://resume-586.web.app/</url>
 
     <modules>
-        <module>user_registration_microservice</module>
-        <module>user_login_microservice</module>
+        <module>user_registration_login_microservice</module>
     </modules>
 
     <properties>
@@ -55,8 +54,6 @@
             <artifactId>mysql-connector-j</artifactId>
             <scope>runtime</scope>
         </dependency>
-
-
         <!-- warning -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

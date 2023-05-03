@@ -5,7 +5,7 @@
     <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/user_login_microservice/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/user_login_microservice/src/main/resources" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/user_registration_microservice/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/user_registration_microservice/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/user_registration_login_microservice/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/user_registration_login_microservice/src/main/resources" charset="UTF-8" />
   </component>
 </project>

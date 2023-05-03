@@ -13,7 +13,7 @@ public class UserController {
     private final UserRepository repository;
 
     // User Register
-    @CrossOrigin
+    @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/register-user")
     public void registerUser(@RequestBody UserRegistrationRequest userRequest) {
         log.info("new user registration {}", userRequest);
@@ -21,6 +21,7 @@ public class UserController {
     }
 
     @GetMapping(path = "{email}")
+    @CrossOrigin(origins = "http://localhost:8080/api/v1/users/")
     public User getUser(@PathVariable("email") String email) {
         User userByEmail = repository.findByEmail(email);
         return userByEmail;
