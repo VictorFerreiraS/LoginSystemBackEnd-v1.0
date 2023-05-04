@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @Slf4j
 @RestController
 @RequestMapping("api/v1/users")
@@ -22,8 +24,8 @@ public class UserController {
 
     @GetMapping(path = "{email}")
     @CrossOrigin(origins = "http://localhost:8080/api/v1/users/")
-    public User getUser(@PathVariable("email") String email) {
-        User userByEmail = repository.findByEmail(email);
+    public Optional<User> getUser(@PathVariable("email") String email) {
+        Optional<User> userByEmail = repository.findByEmail(email);
         return userByEmail;
     }
 
