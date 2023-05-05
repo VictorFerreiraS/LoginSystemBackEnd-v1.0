@@ -1,5 +1,7 @@
 package com.user_registration;
 
+import com.user_registration.user.User;
+import com.user_registration.user.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +17,6 @@ public class UserController {
     private final UserRepository repository;
 
     // User Register
-    @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/register-user")
     public void registerUser(@RequestBody UserRegistrationRequest userRequest) {
         log.info("new user registration {}", userRequest);
@@ -23,7 +24,6 @@ public class UserController {
     }
 
     @GetMapping(path = "{email}")
-    @CrossOrigin(origins = "http://localhost:8080/api/v1/users/")
     public Optional<User> getUser(@PathVariable("email") String email) {
         Optional<User> userByEmail = repository.findByEmail(email);
         return userByEmail;

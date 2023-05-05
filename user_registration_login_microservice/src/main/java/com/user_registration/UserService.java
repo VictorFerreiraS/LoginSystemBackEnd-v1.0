@@ -1,5 +1,7 @@
 package com.user_registration;
 
+import com.user_registration.user.User;
+import com.user_registration.user.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -10,7 +12,6 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
-    private final EmailValidator emailValidator;
 
     public void registerUser(UserRegistrationRequest request) {
         User user = User.builder()

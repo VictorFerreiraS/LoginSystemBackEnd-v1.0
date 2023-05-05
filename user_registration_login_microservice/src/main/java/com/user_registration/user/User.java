@@ -1,4 +1,4 @@
-package com.user_registration;
+package com.user_registration.user;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
