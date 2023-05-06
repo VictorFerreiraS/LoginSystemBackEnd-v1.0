@@ -8,6 +8,7 @@ import com.user_registration.user.Role;
 import com.user_registration.user.User;
 import com.user_registration.user.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.websocket.AuthenticationException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,7 +20,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
-    UserRepository repository;
+    private final UserRepository repository;
 
     public AuthResponse register(RegisterRequest request) {
         var user = User.builder()
@@ -32,32 +33,46 @@ public class AuthService {
                 .build();
 
 
-//        error regarding save user
-        repository.save(user);
-
-//        if (repository.findByEmail(user.getEmail()).isEmpty()) {
-//        } else {
-//            throw new IllegalArgumentException("Email Taken");
-//        }
+        if (repository.findByEmail(user.getEmail()).isEmpty()) {
+            repository.save(user);
+        } else {
+            throw new IllegalArgumentException("Email Taken");
+        }
 
         var jwtToken = jwtService.generateToken(user);
         return AuthResponse.builder().token(jwtToken).build();
     }
 
-    public AuthResponse authenticate(AuthenticationRequest request) {
+    public AuthResponse authenticate(AuthenticationRequest request) throws AuthenticationException {
+        System.out.println("Authenticating...");
         System.out.println(request.getEmail());
         System.out.println(request.getPassword());
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getEmail(),
-                        request.getPassword()
-                )
-        );
+
+
+//       todo: BAD CREDENTIALS Exception;
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            request.getEmail(),
+                            request.getPassword()
+                    )
+            );
+        } catch (Exception err) {
+            throw new AuthenticationException(err.getMessage());
+        }
+
 
         var user = repository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new IllegalArgumentException("user not found"));
 
+        System.out.println(user);
+
         var jwtToken = jwtService.generateToken(user);
-        return AuthResponse.builder().token(jwtToken).build();
+
+        System.out.println(jwtToken);
+
+        return AuthResponse.builder()
+                .token(jwtToken)
+                .build();
     }
 }

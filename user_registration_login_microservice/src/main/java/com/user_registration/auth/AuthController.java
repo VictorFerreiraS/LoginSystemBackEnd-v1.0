@@ -4,6 +4,7 @@ import com.user_registration.auth.requests.AuthenticationRequest;
 import com.user_registration.auth.requests.RegisterRequest;
 import com.user_registration.auth.responses.AuthResponse;
 import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.websocket.AuthenticationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,7 +26,11 @@ public class AuthController {
     @PostMapping("/authenticate")
     public ResponseEntity<AuthResponse> authenticate(
             @RequestBody AuthenticationRequest request
-    ) {
+    ) throws AuthenticationException {
+        System.out.println(request.getEmail());
+        System.out.println(request.getPassword());
+        System.out.println(request);
+
         return ResponseEntity.ok(service.authenticate(request));
     }
 
