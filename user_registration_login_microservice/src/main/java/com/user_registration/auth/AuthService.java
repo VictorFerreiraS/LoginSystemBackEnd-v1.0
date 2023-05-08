@@ -44,12 +44,12 @@ public class AuthService {
     }
 
     public AuthResponse authenticate(AuthenticationRequest request) throws AuthenticationException {
-        System.out.println("Authenticating...");
-        System.out.println(request.getEmail());
-        System.out.println(request.getPassword());
-
-
 //       todo: BAD CREDENTIALS Exception;
+        System.out.println("Auth Request data " +
+                request.getEmail() +
+                request.getPassword()
+        );
+
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
@@ -61,11 +61,10 @@ public class AuthService {
             throw new AuthenticationException(err.getMessage());
         }
 
-
         var user = repository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new IllegalArgumentException("user not found"));
 
-        System.out.println(user);
+        System.out.println("user" + user);
 
         var jwtToken = jwtService.generateToken(user);
 

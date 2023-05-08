@@ -6,7 +6,10 @@ import com.user_registration.auth.responses.AuthResponse;
 import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.websocket.AuthenticationException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -16,7 +19,6 @@ public class AuthController {
     private final AuthService service;
 
     @PostMapping("/register")
-    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<AuthResponse> register(
             @RequestBody RegisterRequest request
     ) {
@@ -27,10 +29,6 @@ public class AuthController {
     public ResponseEntity<AuthResponse> authenticate(
             @RequestBody AuthenticationRequest request
     ) throws AuthenticationException {
-        System.out.println(request.getEmail());
-        System.out.println(request.getPassword());
-        System.out.println(request);
-
         return ResponseEntity.ok(service.authenticate(request));
     }
 
