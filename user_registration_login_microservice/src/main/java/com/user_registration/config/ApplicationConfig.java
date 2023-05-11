@@ -26,6 +26,8 @@ import java.util.List;
 public class ApplicationConfig {
     private final UserRepository repository;
 
+
+    //    Cors configuration allowing GET POST HTTP requests from localhost3000
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
@@ -36,6 +38,7 @@ public class ApplicationConfig {
         return source;
     }
 
+    //    User Details Service bean to return the user details with the findByEmail function in the UserRepository
     @Bean
     public UserDetailsService userDetailsService() {
         //   loadUserByUsername()
@@ -43,6 +46,15 @@ public class ApplicationConfig {
                 .orElseThrow(() -> new UsernameNotFoundException("Username not found"));
     }
 
+    /*
+     *   Compares the provided password by the auth request to the stored password
+     *
+     *  The DaoAuthenticationProvider is a Spring Security implementation of the AuthenticationProvider interface that
+     * retrieves user details and credentials from a UserDetailsService
+     *
+     *  Returns the DaoAuthenticationProvider instance, which can be used by Spring Security
+     * to authenticate users during the authentication process.
+     */
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();

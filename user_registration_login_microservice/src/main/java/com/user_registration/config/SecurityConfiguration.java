@@ -18,6 +18,13 @@ public class SecurityConfiguration {
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
 
+
+    //    Disables CSRF protection
+//    Authorizes requests matching the pattern "/api/v1/**" to be permitted for all users
+//    Requires authentication for all other requests
+//    Sets the session creation policy to stateless, indicating that no session will be created or used to store user data
+//    Adds an authentication provider to use for authentication
+//    Adds a jwtAuthFilter instance to the filter chain before the UsernamePasswordAuthenticationFilter
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http

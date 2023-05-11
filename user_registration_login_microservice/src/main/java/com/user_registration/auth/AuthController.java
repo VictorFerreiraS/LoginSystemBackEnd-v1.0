@@ -15,6 +15,7 @@ public class AuthController {
 
     private final AuthService service;
 
+    //   HTTP request to insert user into databese
     @CrossOrigin
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> register(
@@ -23,8 +24,8 @@ public class AuthController {
         return ResponseEntity.ok(service.register(request));
     }
 
+    //    HTTP REQUEST TO VALIDATE REQUEST WITH USERS IN DATABASE
     @CrossOrigin
-    
     @PostMapping("/authenticate")
     public ResponseEntity<AuthResponse> authenticate(
             @RequestBody AuthenticationRequest request

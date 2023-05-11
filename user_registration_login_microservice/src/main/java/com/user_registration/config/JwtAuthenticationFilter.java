@@ -16,6 +16,16 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+/*
+    The method performs the following tasks:
+    * Extracts the Authorization header from the incoming HTTP request
+    * Validates the JWT token from the header
+    * Extracts the user email from the JWT token
+    * Loads the user details from the user details service
+    * Creates an Authentication object from the user details and sets it in the SecurityContextHolder if the JWT token is valid
+    * Passes the request and response to the next filter in the filter chain
+    * */
+
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -31,30 +41,41 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String authHeader = request.getHeader("Authorization");
         final String jwt;
 
-//      Validate JWT
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
+//      If it's not valid, pass the request and response to the next filter in the chain and return
             return;
         }
 
-
+//        Extract the JWT token from the header
         jwt = authHeader.substring(7);
+//        Extract the user email from the JWT token using a jwtService instance
         String userEmail = jwtService.extractUsername(jwt);
 
+//        Check if the user email is not null and if there is no existing authentication in the SecurityContextHolder
+//        If there is an existing authentication, it means the user is already authenticated, so pass
+//        the request and response to the next filter in the chain and return
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+//        If there is no existing authentication, load the user details from the user details service using the user email
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
 
+//         Check if the JWT token is valid using a jwtService instance and the loaded user details
             if (jwtService.isTokenValid(jwt, userDetails)) {
+//                If the token is valid, create an UsernamePasswordAuthenticationToken instance using the user
+//                details and set it in the SecurityContextHolder
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails,
                         null,
                         userDetails.getAuthorities()
                 );
+
                 authToken.setDetails(new
                         WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
+
         }
+//      Pass the request and response to the next filter in the filter chain
         filterChain.doFilter(request, response);
     }
 }

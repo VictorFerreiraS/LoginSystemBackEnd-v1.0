@@ -22,6 +22,10 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final UserRepository repository;
 
+    //    Registration method
+//    Builds a user checks to see if the email is not taken or empty
+//    Generates a token
+//    Returns a AuthResponse response JWT Token
     public AuthResponse register(RegisterRequest request) {
         var user = User.builder()
                 .firstName(request.getFirstName())
@@ -43,12 +47,13 @@ public class AuthService {
         return AuthResponse.builder().token(jwtToken).build();
     }
 
+
+    //   Authentication method
+//   uses authenticationManager to authenticate the request body in the http request
+//   tests for the presence of the user using find by email
+//   returns a jwtToken allowing request to retrieve the user information
+//    TODO RETRIEVE INFORMATION FROM THE DATABASE
     public AuthResponse authenticate(AuthenticationRequest request) throws AuthenticationException {
-//       todo: BAD CREDENTIALS Exception;
-        System.out.println("Auth Request data " +
-                request.getEmail() +
-                request.getPassword()
-        );
 
         try {
             authenticationManager.authenticate(
@@ -64,14 +69,10 @@ public class AuthService {
         var user = repository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new IllegalArgumentException("user not found"));
 
-        System.out.println("user" + user);
-
         var jwtToken = jwtService.generateToken(user);
-
-        System.out.println(jwtToken);
-
         return AuthResponse.builder()
                 .token(jwtToken)
                 .build();
     }
+
 }
