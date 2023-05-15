@@ -14,6 +14,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -73,6 +75,19 @@ public class AuthService {
         return AuthResponse.builder()
                 .token(jwtToken)
                 .build();
+    }
+
+    public String removeBearer(String token) {
+        if (token.startsWith("Bearer ")) {
+            return token.substring(7);
+        } else {
+            return token;
+        }
+    }
+
+    public Optional<User> getUserData(String token) {
+        String userEmail = jwtService.extractUsername(removeBearer(token));
+        return repository.findByEmail(userEmail);
     }
 
 }

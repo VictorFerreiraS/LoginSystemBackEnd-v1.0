@@ -50,7 +50,6 @@ public class JwtService {
     }
 
     private Key getSignInKey() {
-        System.out.println("---2");
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor((keyBytes));
     }
@@ -60,7 +59,6 @@ public class JwtService {
             UserDetails userDetails,
             long expiration
     ) {
-        System.out.println("---3");
         String jwts = Jwts.builder()
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())
@@ -75,7 +73,6 @@ public class JwtService {
 
 
     private Claims extractAllClaims(String token) {
-        System.out.println("---6");
         return Jwts
                 .parserBuilder()
                 .setSigningKey(getSignInKey())
@@ -94,7 +91,6 @@ public class JwtService {
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
-        System.out.println("---7");
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
     }
