@@ -4,9 +4,13 @@ import com.user_registration.auth.requests.AuthenticationRequest;
 import com.user_registration.auth.requests.RegisterRequest;
 import com.user_registration.auth.responses.AuthResponse;
 import com.user_registration.config.JwtService;
+import com.user_registration.token.Token;
+import com.user_registration.token.TokenRepository;
+import com.user_registration.token.TokenType;
 import com.user_registration.user.Role;
 import com.user_registration.user.User;
 import com.user_registration.user.UserRepository;
+import jakarta.security.auth.message.AuthException;
 import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.websocket.AuthenticationException;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,13 +26,14 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
-    private final UserRepository repository;
+    private final UserRepository userRepository;
+    private final TokenRepository tokenRepository;
 
     //    Registration method
 //    Builds a user checks to see if the email is not taken or empty
 //    Generates a token
 //    Returns a AuthResponse response JWT Token
-    public AuthResponse register(RegisterRequest request) {
+    public AuthResponse register(RegisterRequest request) throws AuthException {
         var user = User.builder()
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
@@ -39,14 +44,15 @@ public class AuthService {
                 .build();
 
 
-        if (repository.findByEmail(user.getEmail()).isEmpty()) {
-            repository.save(user);
+        if (userRepository.findByEmail(user.getEmail()).isEmpty()) {
+            var savedUser = userRepository.save(user);
+            var jwtToken = jwtService.generateToken(user);
+            saveUserToken(savedUser, jwtToken);
+            return AuthResponse.builder().token(jwtToken).build();
         } else {
-            throw new IllegalArgumentException("Email Taken");
+            throw new AuthException("Email Taken");
         }
 
-        var jwtToken = jwtService.generateToken(user);
-        return AuthResponse.builder().token(jwtToken).build();
     }
 
 
@@ -54,8 +60,12 @@ public class AuthService {
 //   uses authenticationManager to authenticate the request body in the http request
 //   tests for the presence of the user using find by email
 //   returns a jwtToken allowing request to retrieve the user information
-//    TODO RETRIEVE INFORMATION FROM THE DATABASE
     public AuthResponse authenticate(AuthenticationRequest request) throws AuthenticationException {
+        // Input validation
+        if (request.getEmail() == null || request.getEmail().isEmpty() ||
+                request.getPassword() == null || request.getPassword().isEmpty()) {
+            throw new AuthenticationException("Email and password are required.");
+        }
 
         try {
             authenticationManager.authenticate(
@@ -65,16 +75,29 @@ public class AuthService {
                     )
             );
         } catch (Exception err) {
-            throw new AuthenticationException(err.getMessage());
+            throw new AuthenticationException("Authentication failed: " + err.getMessage());
         }
 
-        var user = repository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new IllegalArgumentException("user not found"));
+        var user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new AuthenticationException("User not found"));
 
         var jwtToken = jwtService.generateToken(user);
-        return AuthResponse.builder()
+
+        saveUserToken(user, jwtToken);
+
+        return new AuthResponse(jwtToken);
+    }
+
+
+    private void saveUserToken(User user, String jwtToken) {
+        var token = Token.builder()
+                .user(user)
                 .token(jwtToken)
+                .tokenType(TokenType.BEARER)
+                .revoked(false)
+                .expired(false)
                 .build();
+        tokenRepository.save(token);
     }
 
     public String removeBearer(String token) {
@@ -87,7 +110,8 @@ public class AuthService {
 
     public Optional<User> getUserData(String token) {
         String userEmail = jwtService.extractUsername(removeBearer(token));
-        return repository.findByEmail(userEmail);
+        return userRepository.findByEmail(userEmail);
     }
+
 
 }

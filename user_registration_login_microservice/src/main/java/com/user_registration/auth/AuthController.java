@@ -4,6 +4,7 @@ import com.user_registration.auth.requests.AuthenticationRequest;
 import com.user_registration.auth.requests.RegisterRequest;
 import com.user_registration.auth.responses.AuthResponse;
 import com.user_registration.user.User;
+import jakarta.security.auth.message.AuthException;
 import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.websocket.AuthenticationException;
 import org.springframework.http.HttpStatus;
@@ -25,7 +26,7 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> register(
             @RequestBody RegisterRequest request
-    ) {
+    ) throws AuthException {
         return ResponseEntity.ok(service.register(request));
     }
 
