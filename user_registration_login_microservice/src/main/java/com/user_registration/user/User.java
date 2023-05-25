@@ -34,8 +34,8 @@ public class User implements UserDetails {
     private Role role;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "user")
-    private List<Token> tokens;
+    @OneToOne(mappedBy = "user")
+    private Token tokens;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

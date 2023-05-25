@@ -63,7 +63,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 //        If there is no existing authentication, load the user details from the user details service using the user email
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
 //         Check if is expired or revoked
-            var isTokenValid = tokenRepository.findByToken(jwt)
+            var isTokenValid = tokenRepository.findTokenByToken(jwt)
                     .map(t -> !t.isExpired() && !t.isRevoked())
                     .orElse(false);
 //         Check if the JWT token is valid using a jwtService instance, and tokenRepository to see if token is revoked or expired

@@ -7,7 +7,7 @@ Project Breakdown
 
 - Folder:
     - Files:
-        - Ovaerall Look:
+        - Overall Look:
             - specifics.
 - user:
     - User:
