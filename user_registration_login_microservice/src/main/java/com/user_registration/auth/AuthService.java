@@ -29,6 +29,7 @@ public class AuthService {
     private final UserRepository userRepository;
     private final TokenRepository tokenRepository;
 
+
     //    Registration method
 //    Builds a user checks to see if the email is not taken or empty
 //    Generates a token
@@ -54,7 +55,6 @@ public class AuthService {
         }
 
     }
-
 
     //   Authentication method
 //   uses authenticationManager to authenticate the request body in the http request
@@ -83,11 +83,12 @@ public class AuthService {
 
         var jwtToken = jwtService.generateToken(user);
 
+        revokeAllUserTokens(user);
+        deleteALlUserTokens(user);
         saveUserToken(user, jwtToken);
 
         return new AuthResponse(jwtToken);
     }
-
 
     private void saveUserToken(User user, String jwtToken) {
         var token = Token.builder()
@@ -100,6 +101,24 @@ public class AuthService {
         tokenRepository.save(token);
     }
 
+    private void revokeAllUserTokens(User user) {
+        var validUserTokens = tokenRepository.findAllValidTokensByUserId(user.getId());
+        if (validUserTokens.isEmpty())
+            return;
+        validUserTokens.forEach(token -> {
+            token.setExpired(true);
+            token.setRevoked(true);
+        });
+        tokenRepository.saveAll(validUserTokens);
+    }
+
+    private void deleteALlUserTokens(User user) {
+        var allTokens = tokenRepository.findAllTokensByUserId(user.getId());
+        if (allTokens.isEmpty())
+            return;
+        tokenRepository.deleteAll();
+    }
+
     public String removeBearer(String token) {
         if (token.startsWith("Bearer ")) {
             return token.substring(7);
@@ -108,7 +127,7 @@ public class AuthService {
         }
     }
 
-    public Optional<User> getUserData(String token) {
+    public Optional<User> getUserDataWithToken(String token) {
         String userEmail = jwtService.extractUsername(removeBearer(token));
         return userRepository.findByEmail(userEmail);
     }

@@ -44,18 +44,13 @@ public class AuthController {
     public ResponseEntity<User> getUser(
             @RequestHeader("Authorization") String token
     ) {
-        System.out.println("getting...");
-        System.out.println(token);
         // Verify the token to ensure the user is authenticated
         if (token.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NETWORK_AUTHENTICATION_REQUIRED).build();
         }
-
         // Retrieve the user data using the token
-        Optional<User> userOptional = service.getUserData(token);
-
+        Optional<User> userOptional = service.getUserDataWithToken(token);
         User user = userOptional.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
-
         // Return the user data in the response
         return ResponseEntity.ok(user);
     }

@@ -1,5 +1,6 @@
 package com.user_registration.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.user_registration.token.Token;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -32,6 +33,7 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<Token> tokens;
 

@@ -35,3 +35,8 @@ Features:
               $2a$10$nVRoZO17GIKs4AB0IeuUjuELLHu62BHYOzdpsN3RtPwi0ReLXpsHW","confirmed":false,"role":"USER","enabled":
               true,"username":"victor.fagundes586@gmail.com","authorities":[{"authority":"USER"}],"accountNonExpired":
               true,"accountNonLocked":true,"credentialsNonExpired":true}
+- POST Logout at  http://localhost:8080/api/v1/auth/user
+    - requires the Barer token authorization header sent by the authentication POST.
+    - it sets the token's revoke and expired to true in the database.
+    - response:
+        - status 200 ok

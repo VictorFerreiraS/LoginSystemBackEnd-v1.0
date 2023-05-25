@@ -1,10 +1,12 @@
 package com.user_registration.config;
 
+import com.user_registration.token.TokenRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -13,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 
@@ -31,6 +34,7 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
+    private final TokenRepository tokenRepository;
 
     @Override
     protected void doFilterInternal(
@@ -58,9 +62,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 //        If there is no existing authentication, load the user details from the user details service using the user email
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
-
-//         Check if the JWT token is valid using a jwtService instance and the loaded user details
-            if (jwtService.isTokenValid(jwt, userDetails)) {
+//         Check if is expired or revoked
+            var isTokenValid = tokenRepository.findByToken(jwt)
+                    .map(t -> !t.isExpired() && !t.isRevoked())
+                    .orElse(false);
+//         Check if the JWT token is valid using a jwtService instance, and tokenRepository to see if token is revoked or expired
+            if (jwtService.isTokenValid(jwt, userDetails) && isTokenValid) {
 //                If the token is valid, create an UsernamePasswordAuthenticationToken instance using the user
 //                details and set it in the SecurityContextHolder
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
@@ -72,6 +79,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 authToken.setDetails(new
                         WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authToken);
+            } else {
+                throw new ResponseStatusException(HttpStatusCode.valueOf(403), "Invalid Token");
             }
 
         }
