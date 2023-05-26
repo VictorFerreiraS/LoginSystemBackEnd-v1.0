@@ -1,6 +1,6 @@
 package com.user_registration.config;
 
-import com.user_registration.token.TokenRepository;
+import com.user_registration.token.TokenService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -34,7 +34,7 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
-    private final TokenRepository tokenRepository;
+    private final TokenService tokenService;
 
     @Override
     protected void doFilterInternal(
@@ -63,9 +63,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 //        If there is no existing authentication, load the user details from the user details service using the user email
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
 //         Check if is expired or revoked
-            var isTokenValid = tokenRepository.findTokenByToken(jwt)
-                    .map(t -> !t.isExpired() && !t.isRevoked())
-                    .orElse(false);
+            var isTokenValid = tokenService.isTokenValid(jwt);
 //         Check if the JWT token is valid using a jwtService instance, and tokenRepository to see if token is revoked or expired
             if (jwtService.isTokenValid(jwt, userDetails) && isTokenValid) {
 //                If the token is valid, create an UsernamePasswordAuthenticationToken instance using the user

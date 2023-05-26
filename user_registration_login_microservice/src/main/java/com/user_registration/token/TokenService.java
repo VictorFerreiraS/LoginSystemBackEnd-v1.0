@@ -23,7 +23,7 @@ public class TokenService {
     }
 
     public Boolean isTokenValid(String token) {
-        Optional<Token> tokenOptional = tokenRepository.findTokenByToken(token);
+        Optional<Token> tokenOptional = tokenRepository.findByToken(removeBearerFromToken(token));
         return tokenOptional.isPresent() && !tokenOptional.get().isRevoked() && !tokenOptional.get().isExpired();
     }
 
@@ -53,4 +53,7 @@ public class TokenService {
         }
     }
 
+    public Optional<Token> findTokenWithTokenString(String tokenString) {
+        return tokenRepository.findByToken(removeBearerFromToken(tokenString));
+    }
 }
