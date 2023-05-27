@@ -2,7 +2,6 @@ package com.user_registration.user;
 
 
 import com.user_registration.config.JwtService;
-import com.user_registration.token.Token;
 import com.user_registration.token.TokenService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,12 +21,10 @@ public class UserService {
     }
 
     public void deleteUserByToken(String tokenString) {
-        if (!tokenService.isTokenValid(tokenString))
-            return;
-        Optional<Token> token = tokenService.findTokenWithTokenString(tokenString);
-        if (token.isPresent()) {
-            User user = token.get().getUser();
-            userRepository.deleteById(user.getId());
+        if (tokenService.isTokenValid(tokenString) && getUserDataWithToken(tokenString).isPresent()) {
+            System.out.println("741,96325807410852369,8520174369,3,85209614763,085214763,085291474963,25081763,25041841369,8520741369,85207");
+            userRepository.deleteById(getUserDataWithToken(tokenString).get().getId());
         }
     }
 }
+

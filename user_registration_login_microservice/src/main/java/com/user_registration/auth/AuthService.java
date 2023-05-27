@@ -1,5 +1,6 @@
 package com.user_registration.auth;
 
+import com.user_registration.auth.exceptions.UserAuthenticationException;
 import com.user_registration.auth.requests.AuthenticationRequest;
 import com.user_registration.auth.requests.RegisterRequest;
 import com.user_registration.auth.responses.AuthResponse;
@@ -8,9 +9,7 @@ import com.user_registration.token.TokenService;
 import com.user_registration.user.Role;
 import com.user_registration.user.User;
 import com.user_registration.user.UserRepository;
-import jakarta.security.auth.message.AuthException;
 import lombok.RequiredArgsConstructor;
-import org.apache.tomcat.websocket.AuthenticationException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,7 +28,7 @@ public class AuthService {
 //    Builds a user checks to see if the email is not taken or empty
 //    Generates a token
 //    Returns a AuthResponse response JWT Token
-    public AuthResponse register(RegisterRequest request) throws AuthException {
+    public AuthResponse register(RegisterRequest request) throws UserAuthenticationException {
         var user = User.builder()
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
@@ -46,7 +45,7 @@ public class AuthService {
             tokenService.saveUserToken(savedUser, jwtToken);
             return AuthResponse.builder().token(jwtToken).build();
         } else {
-            throw new AuthException("Email Taken");
+            throw new UserAuthenticationException("Email Taken");
         }
 
     }
@@ -55,11 +54,11 @@ public class AuthService {
 //   uses authenticationManager to authenticate the request body in the http request
 //   tests for the presence of the user using find by email
 //   returns a jwtToken allowing request to retrieve the user information
-    public AuthResponse authenticate(AuthenticationRequest request) throws AuthenticationException {
+    public AuthResponse authenticate(AuthenticationRequest request) throws UserAuthenticationException {
         // Input validation
         if (request.getEmail() == null || request.getEmail().isEmpty() ||
                 request.getPassword() == null || request.getPassword().isEmpty()) {
-            throw new AuthenticationException("Email and password are required.");
+            throw new UserAuthenticationException("Email and password are required.");
         }
 
         try {
@@ -70,11 +69,11 @@ public class AuthService {
                     )
             );
         } catch (Exception err) {
-            throw new AuthenticationException("Authentication failed: " + err.getMessage());
+            throw new UserAuthenticationException("Authentication failed: " + err.getMessage());
         }
 
         var user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new AuthenticationException("User not found"));
+                .orElseThrow(() -> new UserAuthenticationException("User not found"));
 
         var jwtToken = jwtService.generateToken(user);
 
@@ -82,7 +81,7 @@ public class AuthService {
         tokenService.deleteALlUserTokens(user);
         tokenService.saveUserToken(user, jwtToken);
 
-        return new AuthResponse(jwtToken);
+        return AuthResponse.builder().token(jwtToken).build();
     }
 
 

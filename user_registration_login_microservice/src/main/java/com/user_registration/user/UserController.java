@@ -36,6 +36,7 @@ public class UserController {
             @RequestHeader("Authorization") String token
     ) {
         if (tokenService.isTokenValid(token)) {
+            tokenService.deleteALlUserTokens(userService.getUserDataWithToken(token).get());
             userService.deleteUserByToken(token);
             return ResponseEntity.ok("User Deleted successfully!");
         } else {

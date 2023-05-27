@@ -56,4 +56,8 @@ public class TokenService {
     public Optional<Token> findTokenWithTokenString(String tokenString) {
         return tokenRepository.findByToken(removeBearerFromToken(tokenString));
     }
+
+    public void deleteTokenByStringToken(String token) {
+        tokenRepository.deleteTokenByToken(token);
+    }
 }
