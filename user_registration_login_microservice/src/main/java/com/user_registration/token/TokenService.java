@@ -42,7 +42,7 @@ public class TokenService {
         var allTokens = tokenRepository.findAllTokensByUserId(user.getId());
         if (allTokens.isEmpty())
             return;
-        tokenRepository.deleteAll();
+        tokenRepository.deleteById(user.getToken().getId());
     }
 
     public String removeBearerFromToken(String token) {
@@ -53,11 +53,12 @@ public class TokenService {
         }
     }
 
-    public Optional<Token> findTokenWithTokenString(String tokenString) {
+    public Optional<Token> getTokenWithTokenString(String tokenString) {
         return tokenRepository.findByToken(removeBearerFromToken(tokenString));
     }
 
-    public void deleteTokenByStringToken(String token) {
-        tokenRepository.deleteTokenByToken(token);
+
+    public void deleteTokenByTokenId(int id) {
+        tokenRepository.deleteById(id);
     }
 }

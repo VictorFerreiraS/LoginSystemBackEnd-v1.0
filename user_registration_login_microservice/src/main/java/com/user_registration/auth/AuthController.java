@@ -1,9 +1,9 @@
 package com.user_registration.auth;
 
-import com.user_registration.auth.exceptions.UserAuthenticationException;
 import com.user_registration.auth.requests.AuthenticationRequest;
 import com.user_registration.auth.requests.RegisterRequest;
 import com.user_registration.auth.responses.AuthResponse;
+import com.user_registration.exceptions.UserAuthenticationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

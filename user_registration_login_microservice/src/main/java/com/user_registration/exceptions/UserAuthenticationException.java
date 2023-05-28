@@ -1,4 +1,4 @@
-package com.user_registration.auth.exceptions;
+package com.user_registration.exceptions;
 
 public class UserAuthenticationException extends Exception {
     public UserAuthenticationException(String message) {

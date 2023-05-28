@@ -25,6 +25,4 @@ public interface TokenRepository extends JpaRepository<Token, Integer> {
 
     //    Uses string token to find an optional instance of Token;
     Optional<Token> findByToken(String token);
-
-    void deleteTokenByToken(String token);
 }

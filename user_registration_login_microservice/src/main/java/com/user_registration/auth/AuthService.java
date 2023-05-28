@@ -1,10 +1,10 @@
 package com.user_registration.auth;
 
-import com.user_registration.auth.exceptions.UserAuthenticationException;
 import com.user_registration.auth.requests.AuthenticationRequest;
 import com.user_registration.auth.requests.RegisterRequest;
 import com.user_registration.auth.responses.AuthResponse;
 import com.user_registration.config.JwtService;
+import com.user_registration.exceptions.UserAuthenticationException;
 import com.user_registration.token.TokenService;
 import com.user_registration.user.Role;
 import com.user_registration.user.User;

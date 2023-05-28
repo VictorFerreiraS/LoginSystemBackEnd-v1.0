@@ -2,6 +2,9 @@ package com.user_registration.user;
 
 
 import com.user_registration.config.JwtService;
+import com.user_registration.exceptions.GettingTokenException;
+import com.user_registration.exceptions.GettingUserException;
+import com.user_registration.token.Token;
 import com.user_registration.token.TokenService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,11 +23,11 @@ public class UserService {
         return userRepository.findByEmail(userEmail);
     }
 
-    public void deleteUserByToken(String tokenString) {
-        if (tokenService.isTokenValid(tokenString) && getUserDataWithToken(tokenString).isPresent()) {
-            System.out.println("741,96325807410852369,8520174369,3,85209614763,085214763,085291474963,25081763,25041841369,8520741369,85207");
-            userRepository.deleteById(getUserDataWithToken(tokenString).get().getId());
-        }
+    public void deleteUserByToken(String tokenString) throws GettingUserException, GettingTokenException {
+        User user = getUserDataWithToken(tokenString).orElseThrow(() -> new GettingUserException("User could not be get;"));
+        Token token = tokenService.getTokenWithTokenString(tokenString).orElseThrow(() -> new GettingTokenException("Token could not be get;"));
+        tokenService.deleteTokenByTokenId(token.getId());
+        userRepository.deleteById(user.getId());
     }
 }
 

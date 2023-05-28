@@ -36,11 +36,14 @@ public class UserController {
             @RequestHeader("Authorization") String token
     ) {
         if (tokenService.isTokenValid(token)) {
-            tokenService.deleteALlUserTokens(userService.getUserDataWithToken(token).get());
-            userService.deleteUserByToken(token);
-            return ResponseEntity.ok("User Deleted successfully!");
+            try {
+                userService.deleteUserByToken(token);
+                return ResponseEntity.ok("User Deleted successfully!");
+            } catch (Throwable error) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error.getMessage());
+            }
         } else {
-            return ResponseEntity.status(HttpStatus.NETWORK_AUTHENTICATION_REQUIRED).build();
+            return ResponseEntity.status(HttpStatus.NETWORK_AUTHENTICATION_REQUIRED).body("User token is not valid please sign in again");
         }
     }
 }

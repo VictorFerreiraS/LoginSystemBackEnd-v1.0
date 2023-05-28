@@ -18,6 +18,11 @@ Project Breakdown
             - Admin.
     - UserRepository:
         - Standard JpaRepository.
+    - UserService:
+        - creates most logics and methods used by the UserControler
+    - UserController:
+        - Get and delete requests:
+            - both takes an authorization header and return HttpStatus codes.
 - config:
     - ApplicationConfig:
         - Configuration for the whole application:
@@ -33,7 +38,16 @@ Project Breakdown
     - AuthService:
         - Implements most methods used by the AuthController.
     - AuthController:
-        - Contains the HHTP requests that can be done by the front end.
+        - Contains the HTTP requests that can be done by the front end.
+- Token:
+    - Token
+        - token class.
+    - Token repository:
+        - Standard JpaRepository plus two query methods.
+    - Token service:
+        - Auxiliary functions to be used by all controllers for manipulating tokens;
+    - TokenType:
+        - ENUM for a BEARER token;
 
 ![img.png](img.png)
 
