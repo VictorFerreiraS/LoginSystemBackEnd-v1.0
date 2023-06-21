@@ -5,13 +5,12 @@ import lombok.AllArgsConstructor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication
 @AllArgsConstructor
-public class UserRegistrationApplication {
+@SpringBootApplication
+public class RegistrationAuthenticationApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(UserRegistrationApplication.class, args);
-        UserRepository userRepository;
+        SpringApplication.run(RegistrationAuthenticationApplication.class, args);
 
     }
 }

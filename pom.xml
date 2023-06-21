@@ -11,14 +11,15 @@
     <url>https://resume-586.web.app/</url>
 
     <modules>
-        <module>user_registration_login_microservice</module>
+        <module>regs-auth-ms</module>
+        <module>confirmation-email-ms</module>
     </modules>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spring.boot.dependecies.version>3.0.4</spring.boot.dependecies.version>
+        <spring.boot.dependecies.version>3.1.0</spring.boot.dependecies.version>
         <spring.security.version>6.0.3</spring.security.version>
-        <spring.boot.maven.plugin.version>3.0.4</spring.boot.maven.plugin.version>
+        <spring.boot.maven.plugin.version>3.1.0</spring.boot.maven.plugin.version>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
     </properties>
@@ -29,7 +30,6 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
                 <version>${spring.boot.dependecies.version}</version>
-
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
