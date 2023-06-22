@@ -12,7 +12,7 @@ Features:
 { 
       "firstName": "firstName",
       "lastName": "lastName",
-      "email": "example@gmail.com",
+      "email": "email@gmail.com",
       "password": "password"
 }
 ```
@@ -26,7 +26,7 @@ Features:
     - request body example:
 ```
 {
-    "email": "example@gmail.com",
+    "email": "email@gmail.com",
     "password": "password"
 }
 ```
