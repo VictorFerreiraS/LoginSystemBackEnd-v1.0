@@ -13,6 +13,7 @@
     <modules>
         <module>regs-auth-ms</module>
         <module>confirmation-email-ms</module>
+        <module>eureka-server</module>
     </modules>
 
     <properties>
