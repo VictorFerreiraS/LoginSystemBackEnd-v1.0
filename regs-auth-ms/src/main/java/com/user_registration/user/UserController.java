@@ -16,7 +16,7 @@ public class UserController {
     private final UserService userService;
 
     @CrossOrigin
-    @GetMapping("/get-user")
+    @GetMapping("get-user")
     public ResponseEntity<User> getUser(
             @RequestHeader("Authorization") String token
     ) {

@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/auth")
+@RequestMapping("api/v1/auth")
 @RequiredArgsConstructor
 public class AuthController {
 
@@ -18,7 +18,7 @@ public class AuthController {
 
     //   HTTP request to insert user into database
     @CrossOrigin
-    @PostMapping("/register")
+    @PostMapping("register")
     public ResponseEntity<AuthResponse> register(
             @RequestBody RegisterRequest request
     ) {
@@ -37,7 +37,7 @@ public class AuthController {
 
     //    HTTP REQUEST TO VALIDATE REQUEST WITH USERS IN DATABASE
     @CrossOrigin
-    @PostMapping("/authenticate")
+    @PostMapping("authenticate")
     public ResponseEntity<AuthResponse> authenticate(
             @RequestBody AuthenticationRequest request
     ) {
