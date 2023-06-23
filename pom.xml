@@ -12,7 +12,7 @@
 
     <modules>
         <module>regs-auth-ms</module>
-        <module>confirmation-email-ms</module>
+        <module>email-ms</module>
         <module>eureka-server</module>
         <module>api-gateway-zuul</module>
     </modules>

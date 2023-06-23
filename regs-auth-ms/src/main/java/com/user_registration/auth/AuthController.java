@@ -29,6 +29,10 @@ public class AuthController {
             AuthResponse exception = AuthResponse.builder().error(new UserAuthenticationException(error.getMessage(), error).getMessage()).build();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception);
         }
+
+//   SEND CONFIRMATION EMAIL
+
+
     }
 
     //    HTTP REQUEST TO VALIDATE REQUEST WITH USERS IN DATABASE

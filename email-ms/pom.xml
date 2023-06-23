@@ -10,9 +10,9 @@
 	</parent>
 
 	<groupId>com</groupId>
-	<artifactId>confirmation-email-ms</artifactId>
+	<artifactId>email-ms</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>confirmation-email-ms</name>
+	<name>email-ms</name>
 	<description>confirmation-email-ms</description>
 
 	<properties>
