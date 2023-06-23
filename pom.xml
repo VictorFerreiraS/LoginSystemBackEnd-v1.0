@@ -15,6 +15,7 @@
         <module>email-ms</module>
         <module>eureka-server</module>
         <module>api-gateway-zuul</module>
+        <module>api-spring-cloud-gateway</module>
     </modules>
 
     <properties>

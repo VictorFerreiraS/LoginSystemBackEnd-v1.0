@@ -8,10 +8,12 @@
         <option value="$PROJECT_DIR$/confirmation-email-ms/pom.xml" />
         <option value="$PROJECT_DIR$/eureka-server/pom.xml" />
         <option value="$PROJECT_DIR$/api-gateway-zuul/pom.xml" />
+        <option value="$PROJECT_DIR$/api-spring-clowd-gateway/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
       <set>
+        <option value="$PROJECT_DIR$/api-gateway-zuul/pom.xml" />
         <option value="$PROJECT_DIR$/user_login_microservice/pom.xml" />
       </set>
     </option>
