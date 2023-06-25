@@ -22,7 +22,7 @@ public class EmailService {
         emailModel.setSendDateEmail(
                 LocalDateTime.now());
         try {
-            SimpleMailMessage message  = new SimpleMailMessage();
+            SimpleMailMessage message = new SimpleMailMessage();
             message.setFrom(emailModel.getEmailFrom());
             message.setTo(emailModel.getEmailTo());
             message.setSubject(emailModel.getSubject());
