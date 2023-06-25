@@ -1,5 +1,6 @@
 package com.user_registration.auth;
 
+import com.user_registration.auth.email.Email;
 import com.user_registration.auth.requests.AuthenticationRequest;
 import com.user_registration.auth.requests.RegisterRequest;
 import com.user_registration.auth.responses.AuthResponse;
@@ -10,11 +11,17 @@ import com.user_registration.user.Role;
 import com.user_registration.user.User;
 import com.user_registration.user.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -23,12 +30,20 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final UserRepository userRepository;
     private final TokenService tokenService;
+    private final RestTemplate restTemplate;
 
+    @Value("${email-ms.host}")
+    private String msEmailHost;
     //    Registration method
 //    Builds a user checks to see if the email is not taken or empty
 //    Generates a token
 //    Returns a AuthResponse response JWT Token
+
+
     public AuthResponse register(RegisterRequest request) throws UserAuthenticationException {
+        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
+            throw new UserAuthenticationException("Email Taken");
+        }
         var user = User.builder()
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
@@ -38,22 +53,40 @@ public class AuthService {
                 .role(Role.USER)
                 .build();
 
+        Email confirmationEmail = Email.builder()
+                .ownerRef("Auth")
+                .emailFrom("victor.fagundes586@gmail.com")
+                .emailTo(request.getEmail())
+                .subject("Email Confirmation")
+                .text("Confirm you email here http://localhost:3000/confirm-email")
+                .build();
 
-        if (userRepository.findByEmail(user.getEmail()).isEmpty()) {
-            var savedUser = userRepository.save(user);
-            var jwtToken = jwtService.generateToken(user);
-            tokenService.saveUserToken(savedUser, jwtToken);
-            return AuthResponse.builder().token(jwtToken).build();
-        } else {
-            throw new UserAuthenticationException("Email Taken");
+        try {
+//            Confirmation email with restTemplate.exchange;
+//            exchange was used in order to receive a custom string response;
+            MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
+            headers.add("Content-Type", "application/json");
+            HttpEntity<Email> requestEntity = new HttpEntity<>(confirmationEmail, headers);
+            ResponseEntity<String> emailResponse = restTemplate.exchange(msEmailHost, HttpMethod.POST, requestEntity, String.class);
+
+            if (emailResponse.getStatusCode().is2xxSuccessful()) {
+                var savedUser = userRepository.save(user);
+                var jwtToken = jwtService.generateToken(user);
+                tokenService.saveUserToken(savedUser, jwtToken);
+                return AuthResponse.builder().token(jwtToken).emailResponse(emailResponse.getBody()).build();
+            } else {
+                throw new UserAuthenticationException("Failed to send confirmation email");
+            }
+        } catch (Exception e) {
+            throw new UserAuthenticationException("Failed to send confirmation email", e);
         }
-
     }
 
     //   Authentication method
 //   uses authenticationManager to authenticate the request body in the http request
 //   tests for the presence of the user using find by email
 //   returns a jwtToken allowing request to retrieve the user information
+
     public AuthResponse authenticate(AuthenticationRequest request) throws UserAuthenticationException {
         // Input validation
         if (request.getEmail() == null || request.getEmail().isEmpty() ||
@@ -83,6 +116,5 @@ public class AuthService {
 
         return AuthResponse.builder().token(jwtToken).build();
     }
-
 
 }
