@@ -1,7 +1,6 @@
-package com.confirmationemailms.email;
+package com.emailms.email;
 
-//import com.ms.email.enums.StatusEmail;
-import com.confirmationemailms.enums.StatusEmail;
+import com.emailms.email.enums.StatusEmail;
 import jakarta.persistence.*;
 import lombok.Data;
 

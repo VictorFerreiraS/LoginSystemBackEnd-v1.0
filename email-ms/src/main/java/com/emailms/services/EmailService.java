@@ -1,8 +1,8 @@
-package com.confirmationemailms.services;
+package com.emailms.services;
 
-import com.confirmationemailms.email.EmailModel;
-import com.confirmationemailms.enums.StatusEmail;
-import com.confirmationemailms.repositories.EmailRepository;
+import com.emailms.email.EmailModel;
+import com.emailms.email.enums.StatusEmail;
+import com.emailms.repositories.EmailRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;

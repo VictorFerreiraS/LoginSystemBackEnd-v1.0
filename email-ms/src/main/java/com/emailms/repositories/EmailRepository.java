@@ -1,6 +1,6 @@
-package com.confirmationemailms.repositories;
+package com.emailms.repositories;
 
-import com.confirmationemailms.email.EmailModel;
+import com.emailms.email.EmailModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface EmailRepository extends JpaRepository<EmailModel, Long> {

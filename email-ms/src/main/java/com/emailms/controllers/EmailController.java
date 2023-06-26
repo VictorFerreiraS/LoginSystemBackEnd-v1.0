@@ -1,7 +1,7 @@
-package com.confirmationemailms.controllers;
-import com.confirmationemailms.dtos.EmailDto;
-import com.confirmationemailms.email.EmailModel;
-import com.confirmationemailms.services.EmailService;
+package com.emailms.controllers;
+import com.emailms.dtos.EmailDto;
+import com.emailms.email.EmailModel;
+import com.emailms.services.EmailService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -15,7 +15,7 @@ public class EmailController {
     private final EmailService emailService;
 
     @PostMapping("send-email")
-    public ResponseEntity<String> sendingEmail(@RequestBody @Valid EmailDto emailDto) {
+    public ResponseEntity<String> sendEmail(@RequestBody @Valid EmailDto emailDto) {
         EmailModel emailModel = new EmailModel();
         BeanUtils.copyProperties(emailDto, emailModel);
 
