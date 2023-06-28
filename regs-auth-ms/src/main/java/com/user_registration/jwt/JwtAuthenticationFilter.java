@@ -1,4 +1,4 @@
-package com.user_registration.config;
+package com.user_registration.jwt;
 
 import com.user_registration.token.TokenService;
 import jakarta.servlet.FilterChain;

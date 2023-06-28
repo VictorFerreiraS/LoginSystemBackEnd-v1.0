@@ -3,7 +3,7 @@ package com.user_registration.auth;
 import com.user_registration.auth.requests.AuthenticationRequest;
 import com.user_registration.auth.requests.RegisterRequest;
 import com.user_registration.auth.responses.AuthResponse;
-import com.user_registration.config.JwtService;
+import com.user_registration.jwt.JwtService;
 import com.user_registration.auth.dtos.EmailDto;
 import com.user_registration.exceptions.UserAuthenticationException;
 import com.user_registration.feignclients.EmailFeignClient;

@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class LogoutService implements LogoutHandler {
-
     private final TokenRepository tokenRepository;
 
     @Override
@@ -31,10 +30,6 @@ public class LogoutService implements LogoutHandler {
 //          Delete all tokens when logout;
             tokenRepository.delete(storedToken);
             tokenRepository.deleteAll();
-
-//          storedToken.setExpired(true);
-//          storedToken.setRevoked(true);
-//          tokenRepository.save(storedToken);
         }
     }
 }

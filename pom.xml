@@ -13,8 +13,6 @@
     <modules>
         <module>regs-auth-ms</module>
         <module>email-ms</module>
-        <module>eureka-server</module>
-        <module>api-spring-cloud-gateway</module>
     </modules>
 
     <properties>

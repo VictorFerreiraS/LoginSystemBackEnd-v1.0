@@ -1,7 +1,7 @@
 package com.user_registration.user;
 
 
-import com.user_registration.config.JwtService;
+import com.user_registration.jwt.JwtService;
 import com.user_registration.exceptions.GettingTokenException;
 import com.user_registration.exceptions.GettingUserException;
 import com.user_registration.token.Token;

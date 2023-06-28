@@ -1,4 +1,4 @@
-package com.user_registration.config;
+package com.user_registration.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

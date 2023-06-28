@@ -12,6 +12,8 @@
     </option>
     <option name="ignoredFiles">
       <set>
+        <option value="$PROJECT_DIR$/api-spring-cloud-gateway/pom.xml" />
+        <option value="$PROJECT_DIR$/eureka-server/pom.xml" />
         <option value="$PROJECT_DIR$/user_login_microservice/pom.xml" />
       </set>
     </option>
