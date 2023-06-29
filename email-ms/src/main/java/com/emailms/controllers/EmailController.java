@@ -1,6 +1,7 @@
 package com.emailms.controllers;
 import com.emailms.dtos.EmailDto;
 import com.emailms.email.EmailModel;
+import com.emailms.exception.EmailException;
 import com.emailms.services.EmailService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -22,12 +23,11 @@ public class EmailController {
         try {
             emailService.sendEmail(emailModel);
             return ResponseEntity.ok("email sent");
-        } catch (Exception error) {
-            String errorMessage = error.getMessage();
-            if (errorMessage.isEmpty()) {
+        } catch (EmailException error) {
+            if (error.getMessage() == null) {
                 return ResponseEntity.badRequest().body("Custom error message: No error message available");
             } else {
-                return ResponseEntity .badRequest().body("Custom error message: " + errorMessage);
+                return ResponseEntity.badRequest().body("Custom error message: " + error.getMessage());
             }
         }
     }
