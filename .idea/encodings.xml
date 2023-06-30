@@ -7,6 +7,7 @@
     <file url="file://$PROJECT_DIR$/api-spring-cloud-gateway/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/email-ms/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/email-ms/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/eureka-server-ms/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/eureka-server/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/eureka-server/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/regs-auth-ms/src/main/java" charset="UTF-8" />

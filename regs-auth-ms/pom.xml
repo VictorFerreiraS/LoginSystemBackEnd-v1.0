@@ -20,6 +20,12 @@
 
     <dependencies>
 
+        <!--LoadBalancer-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-loadbalancer</artifactId>
+        </dependency>
+
         <!--SpringBoot-->
         <dependency>
             <groupId>org.springframework.boot</groupId>

@@ -12,6 +12,7 @@ import com.user_registration.user.Role;
 import com.user_registration.user.User;
 import com.user_registration.user.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,13 +22,13 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class AuthService {
-    private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
-    private final AuthenticationManager authenticationManager;
-    private final UserRepository userRepository;
     private final TokenService tokenService;
-    private final EmailFeignClient emailFeignClient;
+    private final UserRepository userRepository;
 
+    private final AuthenticationManager authenticationManager;
+    private final PasswordEncoder passwordEncoder;
+    private final EmailFeignClient emailFeignClient;
 
 //    Registration method
 //    Builds a user checks to see if the email is not taken or empty
@@ -54,8 +55,7 @@ public AuthResponse register(RegisterRequest request) throws UserAuthenticationE
                 .text("Confirm you email here http://localhost:3000/confirm-email")
                 .build();
 
-//        Confirmation email with restTemplate.exchange;
-//        exchange was used in order to receive a custom string response;
+//        Confirmation email with feignClient
     try {
         ResponseEntity<String> emailResponse = emailFeignClient.sendEmail(confirmationEmail);
 

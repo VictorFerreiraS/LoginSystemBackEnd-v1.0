@@ -16,6 +16,7 @@ public class AuthController {
 
     private final AuthService authService;
 
+
     //   HTTP request to insert user into database
     @CrossOrigin
     @PostMapping("register")
