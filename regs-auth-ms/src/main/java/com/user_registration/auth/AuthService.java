@@ -12,7 +12,6 @@ import com.user_registration.user.Role;
 import com.user_registration.user.User;
 import com.user_registration.user.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
