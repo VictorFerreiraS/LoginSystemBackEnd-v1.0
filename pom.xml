@@ -14,6 +14,7 @@
         <module>regs-auth-ms</module>
         <module>email-ms</module>
         <module>eureka-server-ms</module>
+        <module>spring-gateway-ms</module>
     </modules>
 
     <properties>

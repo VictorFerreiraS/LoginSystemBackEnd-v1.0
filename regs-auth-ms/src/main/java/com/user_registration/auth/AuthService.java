@@ -37,6 +37,7 @@ public AuthResponse register(RegisterRequest request) throws UserAuthenticationE
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
             throw new UserAuthenticationException("Email Taken");
         }
+
         var user = User.builder()
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
