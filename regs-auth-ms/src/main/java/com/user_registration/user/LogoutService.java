@@ -1,4 +1,4 @@
-package com.user_registration.config;
+package com.user_registration.user;
 
 import com.user_registration.token.TokenRepository;
 import jakarta.servlet.http.HttpServletRequest;
