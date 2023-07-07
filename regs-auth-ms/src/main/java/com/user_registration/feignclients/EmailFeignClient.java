@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @Component
-@FeignClient(name = "email-ms", url = "localhost:8081", path = "/api/v1/email")
+@FeignClient(name = "email-ms", path = "/api/v1/email")
 public interface EmailFeignClient {
 
     @PostMapping("send-email")
