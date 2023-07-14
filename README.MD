@@ -69,3 +69,17 @@ Features:
 - it sets the token's revoke and expired to true in the database.
 - response:
     - status 200 ok
+
+<h4> Running in the terminal Ubuntu </h4>
+
+- Change the woking directory in the start.sh file
+- Have java 17 installed in your machine
+- run: chmod u+x start.sh
+  - create the .run for the email-ms microservice
+``` 
+export GOOGLE_PASSWORD= you 16 digt password for you google account 
+
+mvn spring-boot:run
+```
+  - run: chmod u+x run.sh in EVERY microservice listed! (i am not really sure if is needed)
+- the in the terminal in the parent component LoginSystemBackEnd run: ./start.sh 
