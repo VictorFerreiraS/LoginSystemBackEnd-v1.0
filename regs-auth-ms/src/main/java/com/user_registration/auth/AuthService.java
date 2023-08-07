@@ -18,6 +18,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -61,7 +64,14 @@ public AuthResponse register(RegisterRequest request) throws UserAuthenticationE
 
             if (emailResponse.getStatusCode().is2xxSuccessful()) {
                 var savedUser = userRepository.save(user);
-                var jwtToken = jwtService.generateToken(user);
+
+                Map<String, Object> extraClaims = new HashMap<>();
+                extraClaims.put("firstName", user.getFirstName());
+                extraClaims.put("lastName", user.getLastName());
+                extraClaims.put("isConfirmed", user.confirmed);
+
+                var jwtToken = jwtService.generateToken(extraClaims, user);
+
                 tokenService.saveUserToken(savedUser, jwtToken);
                 return AuthResponse.builder().token(jwtToken).emailResponse(emailResponse.getBody()).build();
             } else {
@@ -98,7 +108,11 @@ public AuthResponse register(RegisterRequest request) throws UserAuthenticationE
         var user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new UserAuthenticationException("User not found"));
 
-        var jwtToken = jwtService.generateToken(user);
+        Map<String, Object> extraClaims = new HashMap<>();
+        extraClaims.put("firstName", user.getFirstName());
+        extraClaims.put("lastName", user.getLastName());
+        extraClaims.put("isConfirmed", user.confirmed);
+        var jwtToken = jwtService.generateToken(extraClaims, user);
 
         tokenService.revokeAllUserTokens(user);
         tokenService.deleteALlUserTokens(user);
