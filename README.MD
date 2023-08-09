@@ -77,7 +77,7 @@ Features:
 
 <h4> Running in the terminal Ubuntu </h4>
 
-- Change the woking directory in the start.sh file
+- Change the working directory in the start.sh file
 - Have java 17 installed in your machine
 - run: chmod u+x start.sh
   - create the .run for the email-ms microservice
