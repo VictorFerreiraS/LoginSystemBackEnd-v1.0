@@ -63,12 +63,17 @@ Features:
 - requires the Barer token authorization header sent by the request.
 - Deletes the user and token corresponding to the token in the auth header;
 
-<h4> POST Logout at  http://localhost:8080/api/v1/auth/user </h4>
+<h4> POST Logout at  http://localhost:8080/api/v1/auth/user/logout </h4>
 
 - requires the Barer token authorization header sent by the request.
 - it sets the token's revoke and expired to true in the database.
 - response:
     - status 200 ok
+
+<h4> GET Send Confirmation Email http://localhost:8080/api/v1/auth/user/send-confirmation-email </h4>
+
+- requires the Barer token authorization header sent by the request.
+- Sends the confirmation email to the user;
 
 <h4> Running in the terminal Ubuntu </h4>
 
