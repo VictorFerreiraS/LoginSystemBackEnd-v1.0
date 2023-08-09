@@ -12,6 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 @FeignClient(name = "email-ms", path = "/api/v1/email")
 public interface EmailFeignClient {
 
-    @PostMapping("send-email")
+    @PostMapping("send-account-confirmation-email")
     ResponseEntity<String> sendEmail(@RequestBody @Valid EmailDto emailDto);
 }

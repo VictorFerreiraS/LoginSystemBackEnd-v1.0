@@ -15,6 +15,7 @@ public class UserController {
     private final TokenService tokenService;
     private final UserService userService;
 
+
     @CrossOrigin
     @GetMapping("get-user")
     public ResponseEntity<User> getUser(
@@ -44,6 +45,17 @@ public class UserController {
             }
         } else {
             return ResponseEntity.status(HttpStatus.NETWORK_AUTHENTICATION_REQUIRED).body("User token is not valid please sign in again");
+        }
+    }
+
+    @GetMapping("send-confirmation-email")
+    public ResponseEntity<String> confirmUserEmail(@RequestHeader("Authorization") String token) {
+
+        try {
+            userService.sendConfirmationEmail(token);
+            return ResponseEntity.ok("Email Sent");
+        } catch (Throwable error) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error.getMessage());
         }
     }
 }

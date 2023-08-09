@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 public class EmailController {
     private final EmailService emailService;
 
-    @PostMapping("send-email")
+    @PostMapping("send-account-confirmation-email")
     public ResponseEntity<String> sendEmail(@RequestBody @Valid EmailDto emailDto) {
         EmailModel emailModel = new EmailModel();
         BeanUtils.copyProperties(emailDto, emailModel);

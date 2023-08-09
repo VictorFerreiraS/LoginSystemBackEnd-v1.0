@@ -1,12 +1,16 @@
 package com.user_registration.user;
 
 
+import com.user_registration.auth.dtos.EmailDto;
+import com.user_registration.exceptions.SendingEmailException;
+import com.user_registration.feignclients.EmailFeignClient;
 import com.user_registration.jwt.JwtService;
 import com.user_registration.exceptions.GettingTokenException;
 import com.user_registration.exceptions.GettingUserException;
 import com.user_registration.token.Token;
 import com.user_registration.token.TokenService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -17,6 +21,8 @@ public class UserService {
     private final UserRepository userRepository;
     private final TokenService tokenService;
     private final JwtService jwtService;
+    private final EmailFeignClient emailFeignClient;
+
 
     public Optional<User> getUserDataWithToken(String tokenString) {
         String userEmail = jwtService.extractUsername(tokenService.removeBearerFromToken(tokenString));
@@ -29,5 +35,24 @@ public class UserService {
         tokenService.deleteTokenByTokenId(token.getId());
         userRepository.deleteById(user.getId());
     }
+
+    public void sendConfirmationEmail(String tokenString) throws GettingUserException, SendingEmailException {
+        User user = getUserDataWithToken(tokenString).orElseThrow(() -> new GettingUserException("User could not be get;"));
+
+            EmailDto confirmationEmail = EmailDto.builder()
+                    .ownerRef("Auth")
+                    .emailFrom("victor.fagundes586@gmail.com")
+                    .emailTo(user.getEmail())
+                    .subject("Email Confirmation")
+                    .text("Confirm you email here http://localhost:3000/confirm-email")
+                    .build();
+
+        ResponseEntity<String> emailResponse = emailFeignClient.sendEmail(confirmationEmail);
+
+        if (!emailResponse.getStatusCode().is2xxSuccessful()) {
+        throw new SendingEmailException("email could not be sent");
+        }
+    }
+
 }
 
