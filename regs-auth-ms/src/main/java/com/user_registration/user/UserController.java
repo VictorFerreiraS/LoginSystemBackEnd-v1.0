@@ -32,6 +32,7 @@ public class UserController {
         }
     }
 
+    @CrossOrigin
     @GetMapping("delete-user")
     public ResponseEntity<String> deleteUser(
             @RequestHeader("Authorization") String token
@@ -48,6 +49,7 @@ public class UserController {
         }
     }
 
+    @CrossOrigin
     @GetMapping("send-confirmation-email")
     public ResponseEntity<String> confirmUserEmail(@RequestHeader("Authorization") String token) {
 
