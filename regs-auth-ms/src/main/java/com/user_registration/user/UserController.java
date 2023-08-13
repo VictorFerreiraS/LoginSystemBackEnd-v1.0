@@ -52,12 +52,15 @@ public class UserController {
     @CrossOrigin
     @GetMapping("send-confirmation-email")
     public ResponseEntity<String> confirmUserEmail(@RequestHeader("Authorization") String token) {
-
-        try {
-            userService.sendConfirmationEmail(token);
-            return ResponseEntity.ok("Email Sent");
-        } catch (Throwable error) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error.getMessage());
+        if (tokenService.isTokenValid(token)) {
+            try {
+                userService.sendConfirmationEmail(token);
+                return ResponseEntity.ok("Email Sent");
+            } catch (Throwable error) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error.getMessage());
+            }
+        } else {
+            return ResponseEntity.status(HttpStatus.NETWORK_AUTHENTICATION_REQUIRED).body("User token is not valid please sign in again");
         }
     }
 }
