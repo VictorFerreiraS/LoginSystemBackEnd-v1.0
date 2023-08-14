@@ -63,4 +63,18 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.NETWORK_AUTHENTICATION_REQUIRED).body("User token is not valid please sign in again");
         }
     }
+
+    @PostMapping("/change-password")
+    public ResponseEntity<String> changePassword(@RequestHeader("Authorization") String token, @RequestParam String oldPassword, @RequestParam String newPassword) {
+        if (tokenService.isTokenValid(token)) {
+            try {
+                userService.changeUserPassword(token, oldPassword, newPassword);
+                return ResponseEntity.ok("Password changed successfully");
+            } catch (Throwable error) {
+                return ResponseEntity.badRequest().body(error.getMessage());
+            }
+        } else {
+            return ResponseEntity.status(HttpStatus.NETWORK_AUTHENTICATION_REQUIRED).body("User token is not valid please sign in again");
+        }
+    }
 }
