@@ -72,8 +72,32 @@ Features:
 
 <h4> GET Send Confirmation Email http://localhost:8080/api/v1/auth/user/send-confirmation-email </h4>
 
-- requires the Barer token authorization header sent by the request.
+- requires the Bearer token authorization header sent by the request.
 - Sends the confirmation email to the user;
+<h3> Running on your machine </h3>
+
+<h4> Requirements </h4>
+
+- Java 17 installed
+- MySql server installed
+
+<h4>Database configuration query</h4>
+
+- Running the following query in your mysql terminal or mysql workbench:
+
+```
+-- Create the "user_registration" database
+CREATE DATABASE user_registration;
+
+-- Create the "email" database
+CREATE DATABASE email;
+
+-- Grant all privileges for "user_registration" database to user "root"
+GRANT ALL PRIVILEGES ON user_registration.* TO 'root'@'localhost';
+
+-- Grant all privileges for "email" database to user "root"
+GRANT ALL PRIVILEGES ON email.* TO 'root'@'localhost'; 
+```
 
 <h4> Running in the terminal Ubuntu </h4>
 
@@ -86,5 +110,5 @@ export GOOGLE_PASSWORD= you 16 digt password for you google account
 
 mvn spring-boot:run
 ```
-  - run: chmod u+x run.sh in EVERY microservice listed! (i am not really sure if is needed)
+- run: chmod u+x run.sh in EVERY microservice folder listed!
 - the in the terminal in the parent component LoginSystemBackEnd run: ./start.sh 
