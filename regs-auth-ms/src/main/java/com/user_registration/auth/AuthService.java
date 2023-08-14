@@ -68,7 +68,8 @@ public AuthResponse register(RegisterRequest request) throws UserAuthenticationE
                 Map<String, Object> extraClaims = new HashMap<>();
                 extraClaims.put("firstName", user.getFirstName());
                 extraClaims.put("lastName", user.getLastName());
-                extraClaims.put("isConfirmed", user.confirmed);
+                extraClaims.put("isConfirmed", user.getConfirmed());
+                extraClaims.put("userId", user.getId());
 
                 var jwtToken = jwtService.generateToken(extraClaims, user);
 
@@ -112,6 +113,7 @@ public AuthResponse register(RegisterRequest request) throws UserAuthenticationE
         extraClaims.put("firstName", user.getFirstName());
         extraClaims.put("lastName", user.getLastName());
         extraClaims.put("isConfirmed", user.confirmed);
+        extraClaims.put("userId", user.getId());
         var jwtToken = jwtService.generateToken(extraClaims, user);
 
         tokenService.revokeAllUserTokens(user);
