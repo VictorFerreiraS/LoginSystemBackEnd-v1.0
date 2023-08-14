@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Get the directory of the currently executing script
+SCRIPT_DIR=$(dirname "$(readlink -f "$0")")
+
 # Define the list of services
 SERVICES=(eureka-server-ms email-ms regs-auth-ms spring-gateway-ms)
 
@@ -7,5 +10,5 @@ SERVICES=(eureka-server-ms email-ms regs-auth-ms spring-gateway-ms)
 for SERVICE in "${SERVICES[@]}"
 do
   echo "Running $SERVICE..."
-  gnome-terminal --tab --working-directory="/home/victor/projects/fullstack/login-system/backend/LoginSystemBackEnd/${SERVICE}" -- bash -c "cd /home/victor/projects/fullstack/login-system/backend/LoginSystemBackEnd/${SERVICE}; ./run.sh exec bash"
+  gnome-terminal --tab --working-directory="$SCRIPT_DIR/${SERVICE}" -- bash -c "cd $SCRIPT_DIR/${SERVICE}; ./run.sh; exec bash"
 done
