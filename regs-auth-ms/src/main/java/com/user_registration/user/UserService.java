@@ -2,6 +2,7 @@ package com.user_registration.user;
 
 
 import com.user_registration.auth.dtos.EmailDto;
+import com.user_registration.exceptions.ChangePasswordException;
 import com.user_registration.exceptions.SendingEmailException;
 import com.user_registration.feignclients.EmailFeignClient;
 import com.user_registration.jwt.JwtService;
@@ -51,6 +52,15 @@ public class UserService {
 
         if (!emailResponse.getStatusCode().is2xxSuccessful()) {
         throw new SendingEmailException("email could not be sent");
+        }
+    }
+
+    public void changeUserPassword(String tokenString, String oldPassword, String newPassword) throws GettingUserException, ChangePasswordException {
+        User user = getUserDataWithToken(tokenString).orElseThrow(() -> new GettingUserException("User could not be get;"));
+
+        int updatedCount = userRepository.updatePasswordWithOld(user.getId(), oldPassword, newPassword);
+        if (updatedCount == 0) {
+            throw new ChangePasswordException("Old password is incorrect");
         }
     }
 
