@@ -2,6 +2,7 @@ package com.user_registration.user;
 
 import com.user_registration.exceptions.ChangePasswordException;
 import com.user_registration.exceptions.GettingUserException;
+import com.user_registration.requests.ChangePasswordRequest;
 import com.user_registration.token.TokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -68,24 +69,22 @@ public class UserController {
     }
 
     @PostMapping("/change-password")
-    public ResponseEntity<String> changePassword(@RequestHeader("Authorization") String token, @RequestBody Map<String, String> passwordData) {
-
-
+    public ResponseEntity<String> changePassword(@RequestHeader("Authorization") String token, @RequestBody ChangePasswordRequest passwordData) {
         if (tokenService.isTokenValid(token)) {
-            String oldPassword = passwordData.get("oldPassword");
-            String newPassword = passwordData.get("newPassword");
-
+            String oldPassword = passwordData.getOldPassword();
+            String newPassword = passwordData.getNewPassword();
             try {
                 userService.changeUserPassword(token, oldPassword, newPassword);
                 return ResponseEntity.ok("Password changed successfully");
             } catch (GettingUserException | ChangePasswordException error) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error.getMessage());
             } catch (Exception exception) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error har occurred: " + exception.getMessage());
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + exception.getMessage());
             }
         } else {
-            return ResponseEntity.status(HttpStatus.NETWORK_AUTHENTICATION_REQUIRED).body("User token is not valid please sign in again");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User token is not valid, please sign in again");
         }
     }
+
 
 }
