@@ -12,6 +12,7 @@ import com.user_registration.token.Token;
 import com.user_registration.token.TokenService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -23,6 +24,8 @@ public class UserService {
     private final TokenService tokenService;
     private final JwtService jwtService;
     private final EmailFeignClient emailFeignClient;
+    private final PasswordEncoder passwordEncoder;
+
 
 
     public Optional<User> getUserDataWithToken(String tokenString) {
@@ -57,11 +60,16 @@ public class UserService {
 
     public void changeUserPassword(String tokenString, String oldPassword, String newPassword) throws GettingUserException, ChangePasswordException {
         User user = getUserDataWithToken(tokenString).orElseThrow(() -> new GettingUserException("User could not be get;"));
-
-        int updatedCount = userRepository.updatePasswordWithOld(user.getId(), oldPassword, newPassword);
+        int userId = user.getId();
+        try {
+        int updatedCount = userRepository.updatePasswordWithOld(userId, oldPassword, newPassword);
         if (updatedCount == 0) {
             throw new ChangePasswordException("Old password is incorrect");
         }
+    } catch (ChangePasswordException exception) {
+        throw  new ChangePasswordException("Unable to change password");
+    }
+
     }
 
 }
