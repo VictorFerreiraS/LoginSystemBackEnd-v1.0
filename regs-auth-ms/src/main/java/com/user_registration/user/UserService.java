@@ -62,7 +62,7 @@ public class UserService {
         User user = getUserDataWithToken(tokenString).orElseThrow(() -> new GettingUserException("User could not be get;"));
         int userId = user.getId();
         try {
-        int updatedCount = userRepository.updatePasswordWithOld(userId, oldPassword, newPassword);
+        int updatedCount = userRepository.updatePasswordWithOld(userId, passwordEncoder.encode(oldPassword), passwordEncoder.encode(newPassword));
         if (updatedCount == 0) {
             throw new ChangePasswordException("Old password is incorrect");
         }
