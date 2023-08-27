@@ -1,11 +1,14 @@
 package com.user_registration.user;
 
+import com.user_registration.exceptions.ChangePasswordException;
+import com.user_registration.exceptions.GettingUserException;
 import com.user_registration.token.TokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -65,16 +68,24 @@ public class UserController {
     }
 
     @PostMapping("/change-password")
-    public ResponseEntity<String> changePassword(@RequestHeader("Authorization") String token, @RequestParam String oldPassword, @RequestParam String newPassword) {
+    public ResponseEntity<String> changePassword(@RequestHeader("Authorization") String token, @RequestBody Map<String, String> passwordData) {
+
+
         if (tokenService.isTokenValid(token)) {
+            String oldPassword = passwordData.get("oldPassword");
+            String newPassword = passwordData.get("newPassword");
+
             try {
                 userService.changeUserPassword(token, oldPassword, newPassword);
                 return ResponseEntity.ok("Password changed successfully");
-            } catch (Throwable error) {
-                return ResponseEntity.badRequest().body(error.getMessage());
+            } catch (GettingUserException | ChangePasswordException error) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error.getMessage());
+            } catch (Exception exception) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error har occurred: " + exception.getMessage());
             }
         } else {
             return ResponseEntity.status(HttpStatus.NETWORK_AUTHENTICATION_REQUIRED).body("User token is not valid please sign in again");
         }
     }
+
 }
