@@ -13,12 +13,8 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     Optional<User> findByEmail(String email);
 
-//    @Modifying
-//    @Query("UPDATE User u SET u.password = :newPassword WHERE u.id = :userId")
-//    void updatePassword(@Param("userId") int userId, @Param("newPassword") String newPassword);
-
     @Modifying
-    @Query("UPDATE User u SET u.password = :newPassword WHERE u.id = :userId AND u.password = :oldPassword")
-    int updatePasswordWithOld(@Param("userId") int userId, @Param("oldPassword") String oldPassword, @Param("newPassword") String newPassword);
+    @Query("UPDATE User u SET u.password = :newPassword WHERE u.id = :userId")
+    void updatePassword(@Param("userId") int userId, @Param("newPassword") String newPassword);
 }
 
