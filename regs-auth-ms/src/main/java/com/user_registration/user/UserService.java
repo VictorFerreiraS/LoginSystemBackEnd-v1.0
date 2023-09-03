@@ -14,6 +14,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -58,17 +59,11 @@ public class UserService {
         }
     }
 
+    @Transactional
     public void changeUserPassword(String tokenString, String oldPassword, String newPassword) throws GettingUserException, ChangePasswordException {
         User user = getUserDataWithToken(tokenString).orElseThrow(() -> new GettingUserException("User could not be get;"));
-        int userId = user.getId();
-        try {
-        int updatedCount = userRepository.updatePasswordWithOld(userId, passwordEncoder.encode(oldPassword), passwordEncoder.encode(newPassword));
-        if (updatedCount == 0) {
-            throw new ChangePasswordException("Old password is incorrect");
-        }
-    } catch (ChangePasswordException exception) {
-        throw  new ChangePasswordException("Unable to change password");
-    }
+        Integer userId = user.getId();
+        userRepository.updatePassword(userId, passwordEncoder.encode(newPassword));
 
     }
 
