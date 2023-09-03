@@ -67,7 +67,7 @@ public class UserController {
         }
     }
 
-    @PostMapping("/change-password")
+    @PutMapping("/change-password")
     public ResponseEntity<String> changePassword(@RequestHeader("Authorization") String token, @RequestBody ChangePasswordRequest passwordData) {
         if (tokenService.isTokenValid(token)) {
             String oldPassword = passwordData.getOldPassword();
